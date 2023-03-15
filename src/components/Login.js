@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { BASE_URL } from "./posts";
+import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
-  const [username, isUsername] = useState('')
-  const [password, isPassword] = useState('')
+
+export const Login = (props) => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const loginFunction = async (event) => {
     event.preventDefault()
     try {
@@ -20,7 +23,11 @@ export const Login = () => {
         })
       });
       const result = await response.json();
-      console.log(result);
+
+      localStorage.setItem("token", result.data.token);
+      if (localStorage.length > 0) {
+        navigate("/");
+      };
       return result;
 
     } catch (err) {
@@ -30,12 +37,13 @@ export const Login = () => {
   }
 
 
+
   const handleChange = (event) => {
     if (event.target.placeholder === "username") {
-      isUsername(event.target.value)
+      setUsername(event.target.value)
     }
     if (event.target.placeholder === "password") {
-      isPassword(event.target.value)
+      setPassword(event.target.value)
     }
   }
 
@@ -53,5 +61,8 @@ export const Login = () => {
       </form>
     </div>
   )
-}
 
+
+
+
+}
